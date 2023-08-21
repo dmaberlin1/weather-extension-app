@@ -5,13 +5,13 @@ export interface LocalStorage {
   cities?:string[]
   options?:LocaleStorageOptions
   country?:string
-  user?:string
 }
 export type LocalStorageKeys=keyof LocalStorage
 export interface LocaleStorageOptions {
+  hasAutoOverlay:boolean
   homeCity:string
   tempScale:TempScale.metric|TempScale.imperial
-
+  user?:string
 }
 export const setStoredOptions=(options:LocaleStorageOptions):Promise<void>=>{
   const vals:LocalStorage={
@@ -28,17 +28,16 @@ export const getStoredOptions=():Promise<LocaleStorageOptions>=>{
   const keys:LocalStorageKeys[]=["options"]
   return new Promise((resolve)=>{
     chrome.storage.local.get(keys,(res:LocalStorage)=>{
-      const options:LocaleStorageOptions=res.options || {tempScale:TempScale.metric,homeCity:''}
+      const options:LocaleStorageOptions=res.options || {tempScale:TempScale.metric,homeCity:'',hasAutoOverlay:false}
       resolve(options)
     })
   })
 }
 
-export const  setStoredValues=({cities,country,user,options}:LocalStorage):Promise<void> =>{
+export const  setStoredValues=({cities,country,options}:LocalStorage):Promise<void> =>{
   const vals:LocalStorage={
     cities,
     country,
-    user,
     options
 
   }
@@ -61,7 +60,7 @@ export const setStoredCities=( cities :LocalStorage['cities'])=>{
 }
 
 export const getStoredValues=():Promise<LocalStorage>=>{
-  const keys:LocalStorageKeys[]=['cities','country','user']
+  const keys:LocalStorageKeys[]=['cities','country','options']
   return new Promise((resolve)=>{
     chrome.storage.local.get(keys,(res:LocalStorage)=>{
       resolve(res)

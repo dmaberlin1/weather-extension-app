@@ -3,12 +3,14 @@ import { fetchOpenWeatherDataByCity, IWeatherData, TempScale } from "@root/utils
 import Loading from "@src/UI/Loding";
 import Error from "@src/UI/Error";
 import { LocaleStorageOptions } from "@root/utils/storage";
+import { cn } from "@root/utils/tools";
 
 
 interface IWeatherCard {
   city:string
   tempScale:LocaleStorageOptions["tempScale"]
   onDelete?:()=>void
+  CardIsOverlay?:boolean
 }
 type WeatherCardState=WeatherState
 enum WeatherState {
@@ -16,7 +18,8 @@ enum WeatherState {
   error='error',
   ready='ready'
 }
-const WeatherCard:FC<IWeatherCard> = ({city,onDelete,tempScale}) => {
+const WeatherCard:FC<IWeatherCard> = ({city,onDelete,
+                                        tempScale,CardIsOverlay=false}) => {
   const [weatherData, setWeatherData] =
     useState <IWeatherData | null>(null);
   const [cardState, setCardState] =
@@ -49,14 +52,15 @@ const WeatherCard:FC<IWeatherCard> = ({city,onDelete,tempScale}) => {
   const {name, sys,main,
     weather,}=weatherData as IWeatherData
   return (
-    <div className={'bg-cyan-500/40 py-11 flex flex-col px-2 items-center'}>
-      <p className={'text-xl'}>{name} {sys.country}🌍</p>
-      <p className={'text-xl'}>{main.temp}🌡</p>
-      <p className={'text-xl'}>Feels Like {main.feels_like}</p>
+    <div className={cn('bg-cyan-500/40 py-11 flex flex-col px-2 items-center',{'py-5 px-1 bg-cyan-500/70':CardIsOverlay})}>
+      <p className={cn('text-xl',{'text-lg':CardIsOverlay})}>{name} {sys.country}🌍</p>
+      <p className={cn('text-xl',{'text-lg':CardIsOverlay})}>{main.temp}🌡</p>
+      <p className={cn('text-xl',{'text-lg':CardIsOverlay})}>Feels Like {main.feels_like}</p>
 
       {onDelete && <button type="button"
                            onClick={onDelete}
-                           className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                           className={cn("text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800",
+                             {"text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800": CardIsOverlay})}>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
              strokeWidth="1.5" stroke="currentColor"
              className="w-6 h-6">
