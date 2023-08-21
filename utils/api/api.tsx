@@ -1,6 +1,7 @@
 // https://api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}
-import { BASE_URL ,API_KEY} from "@src/constants/constants";
+import { API_KEY, BASE_URL, IMG_URL_PART1, IMG_URL_PART2 } from "@src/constants/constants";
 import { LocaleStorageOptions } from "@root/utils/storage";
+
 export interface IWeatherData {
   name:string
   main:{
@@ -43,4 +44,8 @@ export async function fetchOpenWeatherDataByCity(city:string,tempScale:LocaleSto
   const data:IWeatherData=await res.json()
 
   return data
+}
+
+export const  getWeatherIconSrc=(iconCode:IWeatherData["weather"][0]["icon"])=> {
+  return  `${IMG_URL_PART1}${iconCode}${IMG_URL_PART2}`
 }

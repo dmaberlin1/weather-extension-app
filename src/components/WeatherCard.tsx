@@ -1,9 +1,10 @@
 import React, { FC, useEffect, useState } from "react";
-import { fetchOpenWeatherDataByCity, IWeatherData, TempScale } from "@root/utils/api/api";
+import { fetchOpenWeatherDataByCity, getWeatherIconSrc, IWeatherData, TempScale } from "@root/utils/api/api";
 import Loading from "@src/UI/Loding";
 import Error from "@src/UI/Error";
 import { LocaleStorageOptions } from "@root/utils/storage";
 import { cn } from "@root/utils/tools";
+import WeatherIcon from "@src/components/WeatherIcon";
 
 
 interface IWeatherCard {
@@ -18,6 +19,7 @@ enum WeatherState {
   error='error',
   ready='ready'
 }
+
 const WeatherCard:FC<IWeatherCard> = ({city,onDelete,
                                         tempScale,CardIsOverlay=false}) => {
   const [weatherData, setWeatherData] =
@@ -50,7 +52,8 @@ const WeatherCard:FC<IWeatherCard> = ({city,onDelete,
   }
 
   const {name, sys,main,
-    weather,}=weatherData as IWeatherData
+    weather}=weatherData as IWeatherData
+  const hasWeatherData=weatherData && weatherData.weather.length>0
   return (
     <div className={cn('bg-cyan-500/40 py-11 flex flex-col px-2 items-center',{'py-5 px-1 bg-cyan-500/70':CardIsOverlay})}>
       <p className={cn('text-xl',{'text-lg':CardIsOverlay})}>{name} {sys.country}🌍</p>
@@ -69,8 +72,13 @@ const WeatherCard:FC<IWeatherCard> = ({city,onDelete,
         </svg>
 
         <span className="sr-only">Delete</span>
-      </button>}
+      </button>
+      }
+      <>
+      {/*{hasWeatherData && <img src={getWeatherIconSrc(weather[0].icon)} alt="weather-icon"/>}*/}
+      {hasWeatherData && <WeatherIcon weather={weather[0]}/>}
 
+      </>
     </div>
   );
 };

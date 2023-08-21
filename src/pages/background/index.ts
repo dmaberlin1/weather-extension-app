@@ -39,7 +39,7 @@ chrome.contextMenus.create({
 })
 
 chrome.alarms.create({
-  periodInMinutes:1/6
+  periodInMinutes:5
 })
 
 chrome.contextMenus.onClicked.addListener((event)=>{
