@@ -10,7 +10,7 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "moduleResolution": "node",
-    "types": ["vite/client", "node"],
+    "types": ["vite/client", "node","vite-plugin-svgr/client"],
     "allowSyntheticDefaultImports": true,
     "lib": ["dom", "dom.iterable", "esnext"],
     "typeRoots": ["./src/global.d.ts"],
@@ -29,8 +29,12 @@
       "@assets/*": ["src/assets/*"],
       "@pages/*": ["src/pages/*"],
       "virtual:reload-on-update-in-background-script": ["./src/global.d.ts"],
-      "virtual:reload-on-update-in-view": ["./src/global.d.ts"]
-    }
+      "virtual:reload-on-update-in-view": ["./src/global.d.ts"],
+
+    },
+    "files": [
+      "custom.d.ts"
+    ]
   },
   "include": ["src", "utils", "vite.config.ts", "node_modules/@types"]
 }

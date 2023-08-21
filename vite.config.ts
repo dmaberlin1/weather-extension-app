@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path, { resolve } from "path";
+import svgr from "vite-plugin-svgr";
 import makeManifest from "./utils/plugins/make-manifest";
 import customDynamicImport from "./utils/plugins/custom-dynamic-import";
 import addHmr from "./utils/plugins/add-hmr";
@@ -31,6 +32,7 @@ export default defineConfig({
   },
   plugins: [
     react(),
+    svgr(),
     makeManifest(manifest, {
       isDev,
       contentScriptCssKey: regenerateCacheInvalidationKey(),

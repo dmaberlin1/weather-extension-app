@@ -1,6 +1,7 @@
 import reloadOnUpdate from "virtual:reload-on-update-in-background-script";
-import {setStoredValues} from "@root/utils/storage";
+import { setStoredValues } from "@root/utils/storage";
 import { ukrainianCities } from "@src/constants/constants";
+import { TempScale } from "@root/utils/api/api";
 
 reloadOnUpdate("pages/background");
 
@@ -14,7 +15,15 @@ console.log("background loaded");
 
 chrome.runtime.onInstalled.addListener(async()=>{
   try {
-  await  setStoredValues( {cities:ukrainianCities,country:'UA',user: 'dmaberlin'})
+  await  setStoredValues( {
+    cities:ukrainianCities,
+    country:'UA',
+    user: 'dmaberlin',
+    options:{
+      tempScale:TempScale.metric,
+      homeCity:''
+    }
+  })
     console.log("Data stored successfully");
   }catch (err) {
 console.error('An error occurred while storing data:',err)

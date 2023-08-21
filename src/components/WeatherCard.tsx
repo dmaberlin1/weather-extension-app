@@ -1,11 +1,13 @@
 import React, { FC, useEffect, useState } from "react";
-import { fetchOpenWeatherDataByCity, IWeatherData } from "@root/utils/api/api";
+import { fetchOpenWeatherDataByCity, IWeatherData, TempScale } from "@root/utils/api/api";
 import Loading from "@src/UI/Loding";
 import Error from "@src/UI/Error";
+import { LocaleStorageOptions } from "@root/utils/storage";
 
 
 interface IWeatherCard {
   city:string
+  tempScale:LocaleStorageOptions["tempScale"]
   onDelete?:()=>void
 }
 type WeatherCardState=WeatherState
@@ -14,7 +16,7 @@ enum WeatherState {
   error='error',
   ready='ready'
 }
-const WeatherCard:FC<IWeatherCard> = ({city,onDelete}) => {
+const WeatherCard:FC<IWeatherCard> = ({city,onDelete,tempScale}) => {
   const [weatherData, setWeatherData] =
     useState <IWeatherData | null>(null);
   const [cardState, setCardState] =
@@ -22,7 +24,7 @@ const WeatherCard:FC<IWeatherCard> = ({city,onDelete}) => {
 
 
   useEffect(() => {
-    fetchOpenWeatherDataByCity(city)
+    fetchOpenWeatherDataByCity(city,tempScale)
       .then((data)=> {
         console.log(data);
         // console.log(data.name+data.sys.country);
@@ -33,7 +35,7 @@ const WeatherCard:FC<IWeatherCard> = ({city,onDelete}) => {
       .catch((err)=> setCardState(WeatherState.error))
 
 
-  }, [city]);
+  }, [city,tempScale]);
 
   if(cardState==WeatherState.loading || cardState== WeatherState.error){
     return (

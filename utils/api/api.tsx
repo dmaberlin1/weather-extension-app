@@ -1,5 +1,6 @@
 // https://api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}
 import { BASE_URL ,API_KEY} from "@src/constants/constants";
+import { LocaleStorageOptions } from "@root/utils/storage";
 export interface IWeatherData {
   name:string
   main:{
@@ -27,8 +28,13 @@ export interface IWeatherData {
     lon:number
   }
 }
-export async function fetchOpenWeatherDataByCity(city:string):Promise<IWeatherData> {
-  const res=await fetch(`${BASE_URL}${city}&units=metric&appid=${API_KEY}`)
+// export type OpenWeatherTempScale='metric'| 'imperial'
+export enum TempScale {
+  metric='metric',
+  imperial='imperial'
+}
+export async function fetchOpenWeatherDataByCity(city:string,tempScale:LocaleStorageOptions["tempScale"]):Promise<IWeatherData> {
+  const res=await fetch(`${BASE_URL}${city}&units=${tempScale}&appid=${API_KEY}`)
 
   if (!res.ok){
     throw new Error('City not found')
